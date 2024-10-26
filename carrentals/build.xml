@@ -1,0 +1,46 @@
+<project name="CarRentalProject" default="run" basedir=".">
+    <!-- Set global properties for this build -->
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="lib.dir" value="lib"/>
+
+    <!-- Clean task to remove old build artifacts -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <!-- Compile task -->
+    <target name="compile">
+        <mkdir dir="${build.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}">
+            <classpath>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+   
+    <target name="dist" depends="clean, compile">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.dir}/CarRentalProject.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="CarDemo"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="dist">
+        <java fork="true" classname="com.carrental.CarDemo" classpath="${dist.dir}/CarRentalProject.jar">
+            <classpath>
+                <path path="${dist.dir}/CarRentalProject.jar"/>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+</project>
